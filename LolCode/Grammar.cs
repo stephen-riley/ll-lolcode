@@ -23,16 +23,16 @@ namespace LolCode.Ast
             select new IdentifierNode(id);
 
         public static Parser<TypeNode> NUMBAR =
-            from lolType in Parse.String("NUMBAR").Token().Text()
-            select new TypeNode(lolType);
+            from _ in Parse.String("NUMBAR").Token()
+            select new TypeNode(VarTypes.LolFloat);
 
         public static Parser<TypeNode> NUMBR =
-            from lolType in Parse.String("NUMBR").Token().Text()
-            select new TypeNode(lolType);
+            from _ in Parse.String("NUMBR").Token()
+            select new TypeNode(VarTypes.LolInt);
 
         public static Parser<TypeNode> YARN =
-            from lolType in Parse.String("YARN").Token().Text()
-            select new TypeNode(lolType);
+            from _ in Parse.String("YARN").Token()
+            select new TypeNode(VarTypes.LolString);
 
         public static Parser<TypeNode> LolType =
             NUMBAR
@@ -41,8 +41,9 @@ namespace LolCode.Ast
 
         public static Parser<AstNode> Atom =
             STRING
+            .Or(INT)
             .Or(FLOAT)
-            .Or(INT);
+            .Or(ID);
 
         public static Parser<AstNode> Expression =
             from atom in Atom

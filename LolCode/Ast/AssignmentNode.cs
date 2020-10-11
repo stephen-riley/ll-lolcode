@@ -1,3 +1,6 @@
+using System;
+using LolCode.Compiler;
+
 namespace LolCode.Ast
 {
     public class AssignmentNode : AstNode
@@ -12,7 +15,15 @@ namespace LolCode.Ast
 
         public override void Emit()
         {
-            throw new System.NotImplementedException();
+            Children[0].Emit();
+
+            var curReg = Lolc.Reg;
+            var llvmType = Lolc.GetLlvmType(Children[0]);
+            var alignment = Lolc.GetLlvmTypeAlignment(Children[0]);
+
+            Console.WriteLine($"    store {llvmType} %{curReg}, {llvmType}* %{Identifier}, align {alignment}");
         }
+
+        public override VarTypes GetLolType() => VarTypes.Unknown;
     }
 }

@@ -2,9 +2,9 @@ namespace LolCode.Ast
 {
     public class TypeNode : AstNode
     {
-        public string Value { get; protected set; }
+        public VarTypes Value { get; protected set; }
 
-        public TypeNode(string val)
+        public TypeNode(VarTypes val)
         {
             Value = val;
         }
@@ -13,5 +13,7 @@ namespace LolCode.Ast
         {
             throw new System.NotImplementedException();
         }
+
+        public override VarTypes GetLolType() => Value;
     }
 }

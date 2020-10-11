@@ -13,5 +13,7 @@ namespace LolCode.Ast
         {
             throw new System.NotImplementedException();
         }
+
+        public override VarTypes GetLolType() => VarTypes.LolInt;
     }
 }

@@ -1,3 +1,6 @@
+using System;
+using LolCode.Compiler;
+
 namespace LolCode.Ast
 {
     public class StringNode : AstNode
@@ -13,7 +16,11 @@ namespace LolCode.Ast
 
         public override void Emit()
         {
-            throw new System.NotImplementedException();
+            var r = Lolc.NextReg;
+            var len = Value.Length + 1;
+            Console.WriteLine($"    %{r} = getelementptr inbounds [{len} x i8], [{len} x i8]* @.str{StringTableIndex}, i64 0, i64 0");
         }
+
+        public override VarTypes GetLolType() => VarTypes.LolString;
     }
 }
