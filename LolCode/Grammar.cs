@@ -5,9 +5,9 @@ namespace LolCode.Ast
     public class Grammar
     {
         public static Parser<AstNode> STRING =
-            from _1 in Parse.Char('\'')
-            from str in Parse.Regex(@"[^']*")
-            from _2 in Parse.Char('\'')
+            from _1 in Parse.Char('\"')
+            from str in Parse.Regex(@"[^""]*")
+            from _2 in Parse.Char('\"')
             select new StringNode(str);
 
         public static Parser<AstNode> FLOAT =
@@ -44,6 +44,10 @@ namespace LolCode.Ast
             .Or(FLOAT)
             .Or(INT);
 
+        public static Parser<AstNode> Expression =
+            from atom in Atom
+            select atom;
+
         public static Parser<VarDeclNode> VarDecl =
             from _1 in Parse.String("I HAZ A").Token()
             from lolType in LolType
@@ -59,7 +63,7 @@ namespace LolCode.Ast
             select new AssignmentNode(id.Identifier, expr);
 
         public static Parser<PrintNode> Print =
-            from _1 in Parse.String("I SEZ").Token().Text()
+            from _ in Parse.String("I SEZ").Token().Text()
             from expr in Expression
             from excl in Parse.String("!").Optional()
             select new PrintNode(expr, excl == null);
@@ -69,22 +73,19 @@ namespace LolCode.Ast
             .Or((Parser<AstNode>)VarDecl)
             .Or((Parser<AstNode>)Print);
 
-        public static Parser<AstNode> Expression =
-            from atom in Atom
-            select atom;
-
         public static Parser<AstNode> ProgramStart =
-            from literal in Parse.String("HAI").Token()
+            from _1 in Parse.String("O").Token().Optional()
+            from _2 in Parse.String("HAI").Token()
             select default(AstNode);
 
         public static Parser<AstNode> ProgramEnd =
-            from literal in Parse.String("KTHXBYE").Token()
+            from _ in Parse.String("KTHXBYE").Token()
             select default(AstNode);
 
         public static Parser<AstNode> Program =
            from _1 in ProgramStart
            from stats in Statement.AtLeastOnce()
-           from _2 in ProgramEnd
+           from _2 in ProgramEnd.Optional()
            select new BodyNode(stats);
     }
 }
