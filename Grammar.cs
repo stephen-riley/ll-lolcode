@@ -5,9 +5,9 @@ namespace LolCode.Ast
     public class Grammar
     {
         public static Parser<AstNode> STRING =
-            from openQuote in Parse.Char('\'')
+            from _1 in Parse.Char('\'')
             from str in Parse.Regex(@"[^']*")
-            from closeQuote in Parse.Char('\'')
+            from _2 in Parse.Char('\'')
             select new StringNode(str);
 
         public static Parser<AstNode> FLOAT =
@@ -45,22 +45,29 @@ namespace LolCode.Ast
             .Or(INT);
 
         public static Parser<VarDeclNode> VarDecl =
-            from x in Parse.String("I HAZ A").Token()
+            from _1 in Parse.String("I HAZ A").Token()
             from lolType in LolType
-            from y in Parse.String("ITZ").Token()
+            from _2 in Parse.String("ITZ").Token()
             from id in ID
             select new VarDeclNode(id.Identifier, lolType);
 
         public static Parser<AssignmentNode> Assignment =
-            from x in Parse.String("LOL").Token()
+            from _1 in Parse.String("LOL").Token()
             from id in ID
-            from y in Parse.String("R").Token()
+            from _2 in Parse.String("R").Token()
             from expr in Expression
             select new AssignmentNode(id.Identifier, expr);
 
+        public static Parser<PrintNode> Print =
+            from _1 in Parse.String("I SEZ").Token().Text()
+            from expr in Expression
+            from excl in Parse.String("!").Optional()
+            select new PrintNode(expr, excl == null);
+
         public static Parser<AstNode> Statement =
             (Parser<AstNode>)Assignment
-            .Or((Parser<AstNode>)VarDecl);
+            .Or((Parser<AstNode>)VarDecl)
+            .Or((Parser<AstNode>)Print);
 
         public static Parser<AstNode> Expression =
             from atom in Atom
@@ -75,9 +82,9 @@ namespace LolCode.Ast
             select default(AstNode);
 
         public static Parser<AstNode> Program =
-           from progStart in ProgramStart
+           from _1 in ProgramStart
            from stats in Statement.AtLeastOnce()
-           from progEnd in ProgramEnd
+           from _2 in ProgramEnd
            select new BodyNode(stats);
     }
 }

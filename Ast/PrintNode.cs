@@ -4,9 +4,12 @@ namespace LolCode.Ast
     {
         public AstNode Expression { get; protected set; }
 
-        public PrintNode(AstNode expression)
+        public bool ShouldPrintNewline { get; protected set; }
+
+        public PrintNode(AstNode expression, bool noNewLine = false)
         {
             Expression = expression;
+            ShouldPrintNewline = !noNewLine;
         }
 
         public override void Emit()
