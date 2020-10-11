@@ -11,7 +11,10 @@ namespace LolCode.Ast
 
         public override void Emit()
         {
-            throw new System.NotImplementedException();
+            foreach (var child in Children)
+            {
+                child.Emit();
+            }
         }
     }
 }

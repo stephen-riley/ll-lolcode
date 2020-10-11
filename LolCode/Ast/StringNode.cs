@@ -4,6 +4,8 @@ namespace LolCode.Ast
     {
         public string Value { get; protected set; }
 
+        public int StringTableIndex { get; set; }
+
         public StringNode(string val)
         {
             Value = val;
