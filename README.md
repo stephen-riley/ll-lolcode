@@ -27,3 +27,4 @@ KTHXBYE
 # Notes
 
 * This is a strongly-typed dialect of LOLCODE.  Declare variables with `I HAZ A <NUMBR|NUMBAR|YARN> ITZ <identifier>`.
+* Uses [Sprache](https://www.nuget.org/packages/Sprache/2.3.1) as the lexer-parser.
