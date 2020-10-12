@@ -1,14 +1,13 @@
 ﻿using System;
 using System.IO;
-using LolCode.Ast;
+using System.Threading.Tasks;
 using LolCode.Compiler;
-using Sprache;
 
 namespace LolCode
 {
     class Program
     {
-        static void Main(string[] args)
+        static async Task Main(string[] args)
         {
             string source;
 
@@ -27,7 +26,11 @@ namespace LolCode
             ";
             }
 
-            new Lolc().CompileSource(source);
+            var compiler = new Lolc();
+            compiler.CompileSource(source);
+            var exe = await new Linker().Link(compiler.Out.ToString());
+
+            Console.WriteLine($"compiled to {exe}");
         }
     }
 }

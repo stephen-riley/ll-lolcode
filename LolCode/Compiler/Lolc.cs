@@ -16,6 +16,8 @@ namespace LolCode.Compiler
 
         public List<StringNode> StringTable { get; } = new List<StringNode>();
 
+        public StringWriter Out { get; } = new StringWriter();
+
         public void CompileFile(string filename)
         {
             CompileSource(File.ReadAllText(filename));
@@ -23,7 +25,7 @@ namespace LolCode.Compiler
 
         public void CompileSource(string source)
         {
-            var ast = Grammar.Program.Parse(source).AssignParents();
+            var ast = Grammar.Program.Parse(source).AssignParents(this);
             BuildStringTable(ast);
             BuildSymbolTables(ast);
             EmitPreamble();
@@ -36,7 +38,7 @@ namespace LolCode.Compiler
 
         private void EmitPreamble()
         {
-            Console.WriteLine(@"
+            Out.WriteLine(@"
 ; source_filename = ""TODO""
 
 @.nl        = unnamed_addr constant [2 x i8] c""\0A\00"", align 1
@@ -49,14 +51,14 @@ namespace LolCode.Compiler
 
         private void EmitMain()
         {
-            Console.WriteLine(@"
+            Out.WriteLine(@"
 define i32 @main() #0 {
 ");
         }
 
         private void EmitPostamble()
         {
-            Console.WriteLine(@"
+            Out.WriteLine(@"
     ret i32 0
 }
 
@@ -72,7 +74,7 @@ attributes #1 = { ""correctly-rounded-divide-sqrt-fp-math""=""false"" ""darwin-s
         {
             foreach (var s in StringTable)
             {
-                Console.WriteLine($"@.str{s.StringTableIndex} = private unnamed_addr constant [{s.Value.Length + 1} x i8] c\"{s.Value}\\00\", align 1");
+                Out.WriteLine($"@.str{s.StringTableIndex} = private unnamed_addr constant [{s.Value.Length + 1} x i8] c\"{s.Value}\\00\", align 1");
             }
         }
 

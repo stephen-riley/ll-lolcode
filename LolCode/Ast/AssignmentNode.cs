@@ -21,7 +21,7 @@ namespace LolCode.Ast
             var llvmType = Lolc.GetLlvmType(Children[0]);
             var alignment = Lolc.GetLlvmTypeAlignment(Children[0]);
 
-            Console.WriteLine($"    store {llvmType} %{curReg}, {llvmType}* %{Identifier}, align {alignment}");
+            Lolc.Out.WriteLine($"    store {llvmType} %{curReg}, {llvmType}* %{Identifier}, align {alignment}");
         }
 
         public override VarTypes GetLolType() => VarTypes.Unknown;

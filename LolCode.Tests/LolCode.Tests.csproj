@@ -20,7 +20,7 @@
   <ItemGroup>
     <Content Include="fixtures/*.*">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>  
+    </Content>
   </ItemGroup>
 
 </Project>
